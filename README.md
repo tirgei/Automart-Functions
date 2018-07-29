@@ -1,4 +1,4 @@
-# Mpesa Daraja - Firebase cloud functions
+# Automart - Firebase cloud functions
 This is the cloud functions for the Automart android mobile application (https://github.com/tirgei/Automart).
 
 In the project, cloud functions was used for:
