@@ -101,3 +101,52 @@ exports.bookTestDrive = functions.https.onRequest((request, response) => {
     });
 
 });
+
+exports.getReports = functions.https.onRequest((request, response) => {
+    const minDate = request.query.minDate;
+    const maxDate = request.query.maxDate;
+    const uid = request.query.uid;
+
+    var carsSold = 0;
+    var partsSold = 0;
+    var totalAmount = 0;
+
+    var toyotaCount = 0;
+    var mazdaCount = 0;
+    var subaruCount = 0;
+    var hondaCount = 0;
+    var benzCount = 0;
+    var bmwCount = 0;
+
+    var res = null;
+
+    for(var i = minDate; i <= maxDate; i++) {
+
+        admin.database().ref('reports').child(uid).child(i).once('value').then(snap => {
+            const report = snap.val();
+            console.log("Month " + i);
+            console.log("Report: " + report);
+
+            if(!report) {
+                return;
+            } else {
+                carsSold += report.carsSold;
+                partsSold += report.partsSold;
+                totalAmount += report.totalAmount;
+
+            }
+
+        });
+    }
+
+    res = {cars_sold:carsSold, parts_sold:partsSold, amount_sold:totalAmount};
+    return response.status(200).json(res);
+
+});
+
+function isWithinRange(value, min, max) {
+    if (value >= min && value <= max) {
+        return true;
+    }
+      return false;
+}
